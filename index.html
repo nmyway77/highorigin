@@ -3,96 +3,67 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>능률 어원편 – 단어 연습</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+  <title>능률 어원편– 단어 클릭[목동서로학원]</title>
   <style>
-    * { box-sizing: border-box; }
-    body {
-      font-family: 'Noto Sans KR', sans-serif;
-      background: #f8fef8;
-      padding: 30px 20px;
-      margin: 0;
-      color: #333;
-    }
+    body { font-family: Arial, sans-serif; padding: 5px 20px; }
     #showWords {
-      padding: 12px 24px;
-      font-size: 18px;
-      font-weight: bold;
+      margin-bottom: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
       background-color: #4CAF50;
       color: white;
-      border: none;
-      border-radius: 10px;
+      border: 2px solid #4CAF50;
+      border-radius: 8px;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      transition: all 0.3s ease;
+      outline: none;
+      display: inline-block;
     }
     #showWords:hover {
-      background-color: #3a9e42;
-      transform: scale(1.03);
+      background-color: white;
+      color: #4CAF50;
     }
     #meaningBox {
       position: sticky;
-      top: 20px;
+      top: 60px;
       background: #fff;
-      padding: 12px 18px;
+      padding: 10px;
+      font-size: 18px;
+      color: #333;
+      border-bottom: 1px solid #ccc;
+      margin-bottom: 10px;
+      border-radius: 4px;
+    }
+    #wordList { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px; }
+    .lessonHeading {
+      display: block;
+      width: 100%;
+      margin: 20px 0 5px;
       font-size: 20px;
       font-weight: bold;
-      border-left: 6px solid #4CAF50;
-      border-radius: 6px;
-      margin: 20px 0 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    .lessonHeading {
-      margin-top: 30px;
-      font-size: 22px;
-      font-weight: bold;
-      color: #2c3e50;
-      border-bottom: 2px solid #ccc;
-      padding-bottom: 6px;
-      width: 100%;
-    }
-    #wordList {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 4px;
     }
     .wordItem {
-      padding: 8px 14px;
       font-size: 18px;
-      background-color: #e6f7e9;
-      border: 1px solid #c6e4cc;
-      border-radius: 8px;
       cursor: pointer;
-      transition: background-color 0.2s, transform 0.2s;
+      padding: 6px 12px;
+      background: #f0f0f0;
+      border-radius: 6px;
+      display: inline-block;
     }
     .wordItem:hover {
-      background-color: #d4f0d9;
-      transform: scale(1.05);
-    }
-
-    @media (max-width: 600px) {
-      #showWords {
-        width: 100%;
-        font-size: 16px;
-      }
-      .wordItem {
-        font-size: 16px;
-        padding: 6px 12px;
-      }
-      #meaningBox {
-        font-size: 18px;
-      }
+      background-color: #e2fbe0;
     }
   </style>
 </head>
 <body>
-  <button id="showWords">능률 어원편– 목동서로영어학원</button>
-  <div id="meaningBox">💡 단어를 클릭하면 뜻과 발음을 들을 수 있어요.</div>
+  <button id="showWords">능률 어원편 – [목동서로 영어학원]</button>
+  <div id="meaningBox">단어를 클릭하면 발음과 뜻이 나옵니다.</div>
   <div id="wordList"></div>
 
   <script>
     const dictionary = [
-{ heading: '1과 단어' },
+      { heading: '1과 단어' },
   { word: 'survive', meaning: '생존하다, 극복하다, 견디다' },
   { word: 'vivid', meaning: '생생한, 선명한' },
   { word: 'vital', meaning: '필수적인, 생명의, 중요한, 활기 넘치는' },
@@ -1964,7 +1935,7 @@
   { word: 'devoted', meaning: '헌신적인, 전념하는' },
   { word: 'devotion', meaning: '헌신, 전념' },
   { word: 'awareness', meaning: '알고 있음, 의식, 자각' },
-  { word: 'warning', meaning: '경고, 주의' }
+  { word: 'warning', meaning: '경고, 주의' },
     ];
 
     const showBtn = document.getElementById('showWords');
@@ -1975,7 +1946,7 @@
       wordListDiv.innerHTML = '';
       dictionary.forEach(entry => {
         if (entry.heading) {
-          const lineBreak = document.createElement('div'); // 🔧 줄바꿈 요소 추가
+          const lineBreak = document.createElement('div');
           lineBreak.style.flexBasis = '100%';
           wordListDiv.appendChild(lineBreak);
 
@@ -1991,10 +1962,15 @@
             meaningBox.textContent = `${entry.word} → ${entry.meaning}`;
             const utter = new SpeechSynthesisUtterance(entry.word);
             utter.lang = 'en-US';
+
             const voices = speechSynthesis.getVoices();
-            utter.voice = voices.find(v => v.lang.startsWith('en') && v.name.includes('Google')) 
-                       || voices.find(v => v.lang.startsWith('en')) 
+
+            // ✅ 미국식 여성 음성 우선 지정
+            utter.voice = voices.find(v => v.name === 'Google US English') 
+                       || voices.find(v => v.name === 'Samantha') 
+                       || voices.find(v => v.lang === 'en-US') 
                        || null;
+
             speechSynthesis.speak(utter);
           });
           wordListDiv.appendChild(span);
