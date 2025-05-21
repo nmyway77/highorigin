@@ -1,9 +1,9 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>능률 어원편– 단어 클릭[목동서로학원]</title>
+  <title>능률 어원편 – [목동서로 영어학원]</title>
   <style>
     body { font-family: Arial, sans-serif; padding: 5px 20px; }
     #showWords {
@@ -26,12 +26,18 @@
       position: sticky;
       top: 60px;
       background: #fff;
-      padding: 10px;
-      font-size: 18px;
+      padding: 12px 20px;
+      font-size: 19px;
       color: #333;
       border-bottom: 1px solid #ccc;
-      margin-bottom: 10px;
-      border-radius: 4px;
+      margin-bottom: 12px;
+      border-radius: 10px;
+      min-height: 28px;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      box-shadow: 0 1px 6px rgba(60,60,60,0.07);
     }
     #wordList { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px; }
     .lessonHeading {
@@ -50,15 +56,35 @@
       background: #f0f0f0;
       border-radius: 6px;
       display: inline-block;
+      transition: background 0.15s;
     }
     .wordItem:hover {
       background-color: #e2fbe0;
     }
+    .homeBtn {
+      padding: 8px 16px;
+      background: #2c3e50;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      margin-right: 10px;
+      flex-shrink: 0;
+    }
+    .homeBtn:hover { background: #466080; }
+    #meaningText {
+      display: inline-block;
+      font-size: 19px;
+    }
   </style>
 </head>
 <body>
-  <button id="showWords">능률 어원편 – [목동서로 영어학원]</button>
-  <div id="meaningBox">단어를 클릭하면 발음과 뜻이 나옵니다.</div>
+  <button id="showWords">수능완성 2200 – [목동서로 영어학원]</button>
+  <div id="meaningBox">
+    <button class="homeBtn" onclick="location.replace('https://nmyway77.github.io/home/');">홈으로</button>
+    <span id="meaningText">단어를 클릭하면 발음과 뜻이 나옵니다.</span>
+  </div>
   <div id="wordList"></div>
 
   <script>
@@ -1933,7 +1959,7 @@
 
     const showBtn = document.getElementById('showWords');
     const wordListDiv = document.getElementById('wordList');
-    const meaningBox = document.getElementById('meaningBox');
+    const meaningText = document.getElementById('meaningText');
 
     function renderWords() {
       wordListDiv.innerHTML = '';
@@ -1952,18 +1978,16 @@
           span.textContent = entry.word;
           span.className = 'wordItem';
           span.addEventListener('click', () => {
-            meaningBox.textContent = `${entry.word} → ${entry.meaning}`;
+            meaningText.textContent = `${entry.word} → ${entry.meaning}`;
+            // 미국식 여성음성 우선!
             const utter = new SpeechSynthesisUtterance(entry.word);
             utter.lang = 'en-US';
-
             const voices = speechSynthesis.getVoices();
-
-            // ✅ 미국식 여성 음성 우선 지정
-            utter.voice = voices.find(v => v.name === 'Google US English') 
-                       || voices.find(v => v.name === 'Samantha') 
-                       || voices.find(v => v.lang === 'en-US') 
-                       || null;
-
+            utter.voice =
+              voices.find(v => v.name === 'Google US English') ||
+              voices.find(v => v.name === 'Samantha') ||
+              voices.find(v => v.lang === 'en-US') ||
+              null;
             speechSynthesis.speak(utter);
           });
           wordListDiv.appendChild(span);
